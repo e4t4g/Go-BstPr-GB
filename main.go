@@ -49,20 +49,17 @@ func main() {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 
-
-	UserSignal1 := make(chan struct{})
+	userSignal1 := make(chan struct{})
 
 	go watchSignals(cancel)
 
-	go UserSig(UserSignal1)
+	go UserSig(userSignal1)
 
 	defer func() {
-		close(UserSignal1)
+		close(userSignal1)
 	}()
 
 	defer cancel()
-
-
 
 	crawler := newCrawler(depthLimit, UserSignal1)
 
@@ -129,3 +126,4 @@ func watchCrawler(ctx context.Context, results <-chan crawlResult, maxErrors, ma
 
 	return readersDone
 }
+

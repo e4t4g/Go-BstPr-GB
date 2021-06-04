@@ -16,19 +16,18 @@ type crawlResult struct {
 	msg string
 }
 
-
 type crawler struct {
 	sync.Mutex
-	visited  map[string]string
-	maxDepth int
-	UserSignal1 chan struct{}
+	visited     map[string]string
+	maxDepth    int
+	userSignal1 chan struct{}
 }
 
-func newCrawler(maxDepth int, UserSignal1 chan struct{}) *crawler {
+func newCrawler(maxDepth int, userSignal1 chan struct{}) *crawler {
 	return &crawler{
-		visited:  make(map[string]string),
-		maxDepth: maxDepth,
-		UserSignal1: UserSignal1,
+		visited:     make(map[string]string),
+		maxDepth:    maxDepth,
+		userSignal1: userSignal1,
 	}
 }
 
@@ -38,7 +37,7 @@ func UserSig(UserSignal1 chan struct{}) {
 		syscall.SIGUSR1)
 	fmt.Println(<-USig)
 	UserSignal1 <- struct{}{}
-	}
+}
 
 // рекурсивно сканируем страницы
 func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResult, depth int) {
@@ -55,9 +54,9 @@ func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResul
 	case <-ctx.Done():
 		return
 
-	case <-c.UserSignal1 :
+	case <-c.userSignal1:
 
-	c.maxDepth += 2
+		c.maxDepth += 2
 
 	default:
 		page, err := parse(url)
@@ -102,3 +101,4 @@ func (c *crawler) checkVisited(url string) bool {
 	_, ok := c.visited[url]
 	return ok
 }
+
