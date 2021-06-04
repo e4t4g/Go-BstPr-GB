@@ -55,7 +55,6 @@ func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResul
 		return
 
 	case <-c.userSignal1:
-
 		c.maxDepth += 2
 
 	default:
