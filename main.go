@@ -16,6 +16,7 @@ var (
 	dir     = flag.String("dir", ".", "directory")
 	workers = flag.Int("workers", runtime.NumCPU(), "num of workers")
 	hlog    *log.Entry
+	pwd, _  = os.Getwd()
 )
 
 type result struct {
@@ -24,9 +25,11 @@ type result struct {
 }
 
 func init() {
+
 	log.SetFormatter(&log.JSONFormatter{})
 	standardFields := log.Fields{
 		"dir": dir,
+		"Pwd": pwd,
 	}
 	hlog = log.WithFields(standardFields)
 
@@ -64,7 +67,7 @@ func main() {
 			fmt.Printf("Found %d duplicates for %v: \n", len(files), crc32.ChecksumIEEE(crc[:]))
 			for count, f := range files {
 				//fmt.Printf("%v %s \n", count, f)
-				hlog.Info("Info: ", count, ". ", f)
+				hlog.Info("№", count, " File: ", pwd, f)
 			}
 		}
 		if len(files) < 1 {
@@ -81,12 +84,12 @@ func worker(input chan string, results chan<- *result, wg *sync.WaitGroup) {
 		var sum [32]byte
 		f, err := os.Open(file)
 		if err != nil {
-			hlog.Error("file cannot be open")
+			hlog.Error("file cannot be open", err)
 			//fmt.Fprintln(os.Stderr, err)
 			continue
 		}
 		if _, err = io.Copy(h, f); err != nil {
-			hlog.Error("problem with file")
+			hlog.Error("problem with file", err)
 			//fmt.Fprintln(os.Stderr, err)
 			f.Close()
 			continue
@@ -113,4 +116,3 @@ func search(input chan string) {
 	})
 	close(input)
 }
-
