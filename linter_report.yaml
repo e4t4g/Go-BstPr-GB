@@ -1,0 +1,15 @@
+main.go:136:15: Error return value of `filepath.Walk` is not checked (errcheck)
+	filepath.Walk(*dir, func(path string, info os.FileInfo, err error) error {
+	             ^
+main.go:59: File is not `gofmt`-ed with `-s` (gofmt)
+//DONE
+
+main.go:17:2: dir is a global variable (gochecknoglobals)
+	dir     = flag.String("dir", ".", "directory")
+	^
+main.go:18:2: workers is a global variable (gochecknoglobals)
+	workers = flag.Int("workers", runtime.NumCPU(), "num of workers")
+	^
+main.go:19:2: hlog is a global variable (gochecknoglobals)
+	hlog    *log.Entry
+	^

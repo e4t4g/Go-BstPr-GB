@@ -56,7 +56,6 @@ func (p *pipeline) FillFileHash(counter map[uint32][]string) {
 	}
 }
 
-
 func init() {
 
 	log.SetFormatter(&log.JSONFormatter{})
