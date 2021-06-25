@@ -3,20 +3,20 @@ package main
 import (
 	"flag"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"hash/crc32"
 	"io"
 	"os"
 	"path/filepath"
 	"runtime"
 	"sync"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var (
 	dir     = flag.String("dir", ".", "directory")
 	workers = flag.Int("workers", runtime.NumCPU(), "num of workers")
 	hlog    *log.Entry
-	pwd, _  = os.Getwd()
 )
 
 type result struct {
@@ -25,19 +25,23 @@ type result struct {
 }
 
 func init() {
-
 	log.SetFormatter(&log.JSONFormatter{})
-	standardFields := log.Fields{
-		"dir": dir,
-		"Pwd": pwd,
-	}
-	hlog = log.WithFields(standardFields)
-
 }
 
 func main() {
 
 	flag.Parse()
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		hlog.Error("problem with file", err)
+	}
+
+	standardFields := log.Fields{
+		"dir": dir,
+		"Pwd": pwd,
+	}
+	hlog = log.WithFields(standardFields)
 
 	fmt.Printf("Searching in %s using %d workers...\n", *dir, *workers)
 	input := make(chan string)
@@ -105,7 +109,7 @@ func worker(input chan string, results chan<- *result, wg *sync.WaitGroup) {
 }
 
 func search(input chan string) {
-	filepath.Walk(*dir, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(*dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			//fmt.Fprintln(os.Stderr, err)
 			hlog.Error("incorrect directory path", err)
@@ -114,5 +118,9 @@ func search(input chan string) {
 		}
 		return nil
 	})
+	if err != nil {
+		hlog.Error("incorrect directory path", err)
+	}
+
 	close(input)
 }
