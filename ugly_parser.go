@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"golang.org/x/net/html"
 	"net/http"
+
+	"golang.org/x/net/html"
 )
 
 // парсим страницу

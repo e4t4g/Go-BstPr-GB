@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 type crawlResult struct {
@@ -100,4 +101,3 @@ func (c *crawler) checkVisited(url string) bool {
 	_, ok := c.visited[url]
 	return ok
 }
-

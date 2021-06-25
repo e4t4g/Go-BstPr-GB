@@ -61,7 +61,7 @@ func main() {
 
 	defer cancel()
 
-	crawler := newCrawler(depthLimit, UserSignal1)
+	crawler := newCrawler(depthLimit, userSignal1)
 
 	// создаём канал для результатов
 	results := make(chan crawlResult)
@@ -126,4 +126,3 @@ func watchCrawler(ctx context.Context, results <-chan crawlResult, maxErrors, ma
 
 	return readersDone
 }
-

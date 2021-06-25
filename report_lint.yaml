@@ -1,0 +1,29 @@
+crawler.go:103: File is not `gofmt`-ed with `-s` (gofmt)
+//DONE
+
+main.go:129: File is not `gofmt`-ed with `-s` (gofmt)
+//DONE
+
+crawler.go:6: File is not `goimports`-ed with -local path/to/module (goimports)
+	"github.com/pkg/errors"
+//DONE
+
+ugly_parser.go:5: File is not `goimports`-ed with -local path/to/module (goimports)
+	"golang.org/x/net/html"
+//DONE
+
+ugly_parser.go:12:12: G107: Potential HTTP request made with variable url (gosec)
+	r, err := http.Get(url)
+	          ^
+main.go:24:2: url is a global variable (gochecknoglobals)
+	url string
+	^
+main.go:27:2: depthLimit is a global variable (gochecknoglobals)
+	depthLimit int
+	^
+crawler.go:36:2: sigchanyzer: misuse of unbuffered os.Signal channel as argument to signal.Notify (govet)
+	signal.Notify(USig,
+	^
+main.go:86:2: sigchanyzer: misuse of unbuffered os.Signal channel as argument to signal.Notify (govet)
+	signal.Notify(osSignalChan,
+	^
