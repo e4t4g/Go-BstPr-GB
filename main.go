@@ -2,9 +2,12 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,30 +22,63 @@ const (
 	resultsLimit = 10000
 )
 
-var (
-	// адрес в интернете (например, https://en.wikipedia.org/wiki/Lionel_Messi)
-	url string
+type Config struct {
+	Url string `json:"url"`
+}
 
+var (
 	// насколько глубоко нам надо смотреть (например, 10)
 	depthLimit int
+	jsonFile   = flag.String("jsonFile", "tsconfig.json", "add link to json config file")
 )
 
 // Как вы помните, функция инициализации стартует первой
 func init() {
 	// задаём и парсим флаги
-	flag.StringVar(&url, "url", "", "url address")
 	flag.IntVar(&depthLimit, "depth", 3, "max depth for run")
 	flag.Parse()
+}
 
-	// Проверяем обязательное условие
-	if url == "" {
+func CreateNew() (*Config, error) {
+
+	var config *Config
+
+	if *jsonFile == "" {
+		config = &Config{
+			"",
+		}
+	} else {
+		confJsonFile, err := ioutil.ReadFile(*jsonFile)
+		if err != nil {
+			log.Println(err)
+		}
+		err = json.Unmarshal(confJsonFile, &config)
+		if err != nil {
+			log.Println(err)
+		}
+
+	}
+
+	_, err := url.ParseRequestURI(config.Url)
+	if err != nil {
+		return nil, err
+	}
+
+	return config, nil
+}
+
+func main() {
+
+	config, err := CreateNew()
+	if err != nil {
+		fmt.Println("error", err)
+	}
+	if config.Url == "" {
 		log.Print("no url set by flag")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
-}
 
-func main() {
 	fmt.Println(os.Getpid())
 
 	started := time.Now()
@@ -71,17 +107,18 @@ func main() {
 
 	// запуск основной логики
 	// внутри есть рекурсивные запуски анализа в других горутинах
-	crawler.run(ctx, url, results, 0)
+	crawler.run(ctx, config.Url, results, 0)
 
 	// ждём завершения работы чтения в своей горутине
 	<-done
 
 	log.Println(time.Since(started))
+
 }
 
 // ловим сигналы выключения
 func watchSignals(cancel context.CancelFunc) {
-	osSignalChan := make(chan os.Signal)
+	osSignalChan := make(chan os.Signal, 2)
 
 	signal.Notify(osSignalChan,
 		syscall.SIGINT,

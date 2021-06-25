@@ -33,7 +33,7 @@ func newCrawler(maxDepth int, userSignal1 chan struct{}) *crawler {
 }
 
 func UserSig(UserSignal1 chan struct{}) {
-	USig := make(chan os.Signal)
+	USig := make(chan os.Signal, 1)
 	signal.Notify(USig,
 		syscall.SIGUSR1)
 	fmt.Println(<-USig)
@@ -44,6 +44,12 @@ func UserSig(UserSignal1 chan struct{}) {
 func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResult, depth int) {
 	// просто для того, чтобы успевать следить за выводом программы, можно убрать :)
 	time.Sleep(5 * time.Second)
+
+	config, err := CreateNew()
+	if err != nil {
+		fmt.Println("error", err)
+		os.Exit(1)
+	}
 
 	// проверка глубины
 	if depth >= c.maxDepth {
@@ -59,7 +65,7 @@ func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResul
 		c.maxDepth += 2
 
 	default:
-		page, err := parse(url)
+		page, err := parse(config.Url)
 		if err != nil {
 			// ошибку отправляем в канал, а не обрабатываем на месте
 			results <- crawlResult{
