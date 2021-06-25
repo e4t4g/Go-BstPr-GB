@@ -132,7 +132,7 @@ func getHash(filename string) (uint32, error) {
 }
 
 func search(input chan string) {
-	filepath.Walk(*dir, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(*dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			hlog.Error("incorrect directory path", err)
 		} else if info.Mode().IsRegular() {
@@ -140,5 +140,8 @@ func search(input chan string) {
 		}
 		return nil
 	})
+	if err != nil {
+		hlog.Error("incorrect directory path", err)
+	}
 	close(input)
 }

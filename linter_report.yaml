@@ -1,5 +1,6 @@
 main.go:136:15: Error return value of `filepath.Walk` is not checked (errcheck)
 	filepath.Walk(*dir, func(path string, info os.FileInfo, err error) error {
+//DONE
 	             ^
 main.go:59: File is not `gofmt`-ed with `-s` (gofmt)
 //DONE
