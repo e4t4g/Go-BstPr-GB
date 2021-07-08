@@ -1,0 +1,63 @@
+
+# настройки запуска
+run:
+# значение конкурентности устанавливаем по количеству CPU
+concurrency: 4
+
+# анализ не должен превышать
+timeout: 1m
+
+# выводить "exit-code" при наличии хотя бы одного сообщения
+issues-exit-code: 1
+
+# не включать анализ тестов
+tests: false
+
+# Пропускать папки вендора, сторонних зависимостей и т.д.
+#   vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+skip-dirs-use-default: true
+
+# Пропускать файлы, заканчивающиеся на .bad.go
+skip-files:
+  - ".*\\.bad\\.go$"
+  - ".*\\.bad\\.mock.go$"
+
+# список линтеров
+linters:
+  disable-all: true
+  enable:
+    - gofmt # Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification
+    - goimports # Goimports does everything that gofmt does. Additionally it checks unused imports
+    - govet # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
+    - goconst # Finds repeated strings that could be replaced by a constant
+    - funlen # Tool for detection of long functions
+    - bodyclose # checks whether HTTP response body is closed successfully
+    - errcheck # Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases
+    - deadcode # Finds unused code
+    - exportloopref # checks for pointers to enclosing loop variables
+    - gochecknoglobals # Find global variables
+    - nakedret # Finds naked returns in functions greater than a specified function length
+    - gosec # Inspects source code for security problems
+    - staticcheck #Staticcheck is a go vet on steroids, applying a ton of static analysis checks
+
+
+
+# настройки отдельных линтеров
+linters-settings:
+  goimports:
+    # указываем префикс локальных импортов, они будут группироваться
+    local-prefixes: path/to/module
+  govet:
+    # проверка на использование переменных «в тени»
+    check-shadowing: true
+  goconst:
+    # goconst находит строки не меньше 2 символов, которые встречаются хотя бы 2 раза
+    min-len: 2
+    min-occurrences: 2
+  funlen:
+    # функция помечается длинной если она больше 100 строк кода либо больше 50 операций
+    lines: 100
+    statements: 50
+  nakedret:
+    max-func-lines: 5
+
