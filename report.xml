@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite tests="2" failures="0" time="0.003" name="github.com/e4t4g/Go-BstPr-GB">
+		<properties>
+			<property name="go.version" value="go1.13.8"></property>
+		</properties>
+		<testcase classname="Go-BstPr-GB" name="Test_worker" time="0.000"></testcase>
+		<testcase classname="Go-BstPr-GB" name="Test_worker/1_case" time="0.000"></testcase>
+	</testsuite>
+</testsuites>
