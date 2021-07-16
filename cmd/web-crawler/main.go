@@ -12,6 +12,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	crawler2 "Go-BstPr-GB/pkg/crawler"
 )
 
 const (
@@ -97,10 +99,10 @@ func main() {
 
 	defer cancel()
 
-	crawler := NewCrawler(depthLimit, userSignal1)
+	crawler := crawler2.NewCrawler(depthLimit, userSignal1)
 
 	// создаём канал для результатов
-	results := make(chan crawlResult)
+	results := make(chan crawler2.crawlResult)
 
 	// запускаем горутину для чтения из каналов
 	done := watchCrawler(ctx, results, errorsLimit, resultsLimit)
@@ -139,7 +141,7 @@ func watchSignals(cancel context.CancelFunc) {
 	cancel()
 }
 
-func watchCrawler(ctx context.Context, results <-chan crawlResult, maxErrors, maxResults int) chan struct{} {
+func watchCrawler(ctx context.Context, results <-chan crawler2.crawlResult, maxErrors, maxResults int) chan struct{} {
 	readersDone := make(chan struct{})
 
 	go func() {

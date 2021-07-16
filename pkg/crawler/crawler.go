@@ -1,4 +1,4 @@
-package main
+package crawler
 
 import (
 "context"
@@ -9,7 +9,9 @@ import (
 
 "github.com/pkg/errors"
 
+"/go/src/Go-BstPr-GB/pkg/parser"
 
+	"Go-BstPr-GB/cmd/web-crawler"
 )
 
 type crawlResult struct {
@@ -39,7 +41,7 @@ func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResul
 	// просто для того, чтобы успевать следить за выводом программы, можно убрать :)
 	time.Sleep(5 * time.Second)
 
-	config, err := CreateNew()
+	config, err := main.CreateNew()
 	if err != nil {
 		fmt.Println("error", err)
 		os.Exit(1)
@@ -59,7 +61,7 @@ func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResul
 		c.maxDepth += 2
 
 	default:
-		page, err := parse(config.Url)
+		page, err := parser.parse(config.Url)
 		if err != nil {
 			// ошибку отправляем в канал, а не обрабатываем на месте
 			results <- crawlResult{
@@ -68,8 +70,8 @@ func (c *crawler) run(ctx context.Context, url string, results chan<- crawlResul
 			return
 		}
 
-		title := pageTitle(page)
-		links := pageLinks(nil, page)
+		title := parser.pageTitle(page)
+		links := parser.pageLinks(nil, page)
 
 		// блокировка требуется, т.к. мы модифицируем мапку в несколько горутин
 		c.Lock()
