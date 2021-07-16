@@ -1,4 +1,4 @@
-package crawler
+package main
 
 import (
 "context"
@@ -9,7 +9,6 @@ import (
 
 "github.com/pkg/errors"
 
-"Go-BstPr-GB/pkg/parser"
 
 )
 

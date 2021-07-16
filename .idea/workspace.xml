@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cff3a46b-e793-42f6-a27d-3a3423c50fa5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmd/web-crawler/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmd/web-crawler/tsconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/golangci-lint.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/crawler/crawler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/parser/ugly_parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/crawler/crawler.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/crawler/crawler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/parser/ugly_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/parser/ugly_parser.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +21,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
   <component name="ProjectId" id="1uqnsaUoOBRZsuPzPrWDzOV8tia" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
