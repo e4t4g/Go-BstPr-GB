@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cff3a46b-e793-42f6-a27d-3a3423c50fa5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/pkg/configure/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/web-crawler/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/web-crawler/go.sum" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/web-crawler/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/web-crawler/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/crawler/crawler.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/crawler/crawler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/parser/ugly_parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/parser/ugly_parser.go" afterDir="false" />
     </list>
@@ -13,6 +19,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Go Application" />
         <option value="Go File" />
       </list>
     </option>
@@ -33,6 +40,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -45,6 +53,13 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pkg/crawler" />
+      <recent name="$PROJECT_DIR$/pkg/parser" />
+      <recent name="$PROJECT_DIR$/cmd/web-crawler" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -65,6 +80,9 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

@@ -1,4 +1,5 @@
 package parser
+
 import (
 	"fmt"
 	"net/http"
@@ -7,7 +8,8 @@ import (
 )
 
 // парсим страницу
-func parse(url string) (*html.Node, error) {
+
+func Parse(url string) (*html.Node, error) {
 
 	// что здесь должно быть вместо http.Get? :)
 	r, err := http.Get(url)
@@ -19,19 +21,23 @@ func parse(url string) (*html.Node, error) {
 	if err != nil {
 		return nil, fmt.Errorf("can't parse page")
 	}
-	r.Body.Close()
+	err = r.Body.Close()
+	if err != nil {
+		return nil, err
+	}
 	return b, err
 
 }
 
 // ищем заголовок на странице
-func pageTitle(n *html.Node) string {
+
+func PageTitle(n *html.Node) string {
 	var title string
 	if n.Type == html.ElementNode && n.Data == "title" {
 		return n.FirstChild.Data
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		title = pageTitle(c)
+		title = PageTitle(c)
 		if title != "" {
 			break
 		}
@@ -40,7 +46,8 @@ func pageTitle(n *html.Node) string {
 }
 
 // ищем все ссылки на страницы. Используем мапку чтобы избежать дубликатов
-func pageLinks(links map[string]struct{}, n *html.Node) map[string]struct{} {
+
+func PageLinks(links map[string]struct{}, n *html.Node) map[string]struct{} {
 	if links == nil {
 		links = make(map[string]struct{})
 	}
@@ -58,7 +65,7 @@ func pageLinks(links map[string]struct{}, n *html.Node) map[string]struct{} {
 		}
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		links = pageLinks(links, c)
+		links = PageLinks(links, c)
 	}
 	return links
 }

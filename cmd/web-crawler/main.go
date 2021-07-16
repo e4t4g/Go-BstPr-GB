@@ -2,18 +2,16 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	crawler2 "Go-BstPr-GB/pkg/crawler"
+	"Go-BstPr-GB/pkg/configure"
+	"Go-BstPr-GB/pkg/crawler"
 )
 
 const (
@@ -24,14 +22,9 @@ const (
 	resultsLimit = 10000
 )
 
-type Config struct {
-	Url string `json:"url"`
-}
-
 var (
 	// насколько глубоко нам надо смотреть (например, 10)
 	depthLimit int
-	jsonFile   = flag.String("jsonFile", "tsconfig.json", "add link to json config file")
 )
 
 // Как вы помните, функция инициализации стартует первой
@@ -41,37 +34,9 @@ func init() {
 	flag.Parse()
 }
 
-func CreateNew() (*Config, error) {
-
-	var config *Config
-
-	if *jsonFile == "" {
-		config = &Config{
-			"",
-		}
-	} else {
-		confJsonFile, err := ioutil.ReadFile(*jsonFile)
-		if err != nil {
-			log.Println(err)
-		}
-		err = json.Unmarshal(confJsonFile, &config)
-		if err != nil {
-			log.Println(err)
-		}
-
-	}
-
-	_, err := url.ParseRequestURI(config.Url)
-	if err != nil {
-		return nil, err
-	}
-
-	return config, nil
-}
-
 func main() {
 
-	config, err := CreateNew()
+	config, err := configure.CreateNew()
 	if err != nil {
 		fmt.Println("error", err)
 	}
@@ -99,17 +64,17 @@ func main() {
 
 	defer cancel()
 
-	crawler := crawler2.NewCrawler(depthLimit, userSignal1)
+	crawler1 := crawler.NewCrawler(depthLimit, userSignal1)
 
 	// создаём канал для результатов
-	results := make(chan crawler2.crawlResult)
+	results := make(chan crawler.CrawlResult)
 
 	// запускаем горутину для чтения из каналов
 	done := watchCrawler(ctx, results, errorsLimit, resultsLimit)
 
 	// запуск основной логики
 	// внутри есть рекурсивные запуски анализа в других горутинах
-	crawler.run(ctx, config.Url, results, 0)
+	crawler1.Run(ctx, config.Url, results, 0)
 
 	// ждём завершения работы чтения в своей горутине
 	<-done
@@ -141,7 +106,7 @@ func watchSignals(cancel context.CancelFunc) {
 	cancel()
 }
 
-func watchCrawler(ctx context.Context, results <-chan crawler2.crawlResult, maxErrors, maxResults int) chan struct{} {
+func watchCrawler(ctx context.Context, results <-chan crawler.CrawlResult, maxErrors, maxResults int) chan struct{} {
 	readersDone := make(chan struct{})
 
 	go func() {
@@ -152,7 +117,7 @@ func watchCrawler(ctx context.Context, results <-chan crawler2.crawlResult, maxE
 				return
 
 			case result := <-results:
-				if result.err != nil {
+				if result.Err != nil {
 					maxErrors--
 					if maxErrors <= 0 {
 						log.Println("max errors exceeded")
@@ -161,7 +126,7 @@ func watchCrawler(ctx context.Context, results <-chan crawler2.crawlResult, maxE
 					continue
 				}
 
-				log.Printf("crawling result: %v", result.msg)
+				log.Printf("crawling result: %v", result.Msg)
 				maxResults--
 				if maxResults <= 0 {
 					log.Println("got max results")
